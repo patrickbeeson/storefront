@@ -1,0 +1,22 @@
+{% extends "base_generic.html" %}
+
+{% block title %}Starlight Custom Cycling Apparel | http://starlightapparel.com{% endblock %}
+
+{% block app_type %}home{% endblock %}
+
+{% block view_type %}{% endblock %}
+
+		{% block testimonials %}
+		<aside id="testimonials">
+			<ul>
+			{% for testimonial in testimonial_list %}
+				<li class="testimonial">
+					<p class="testimonial_attribution">{% if testimonial.source_link %}<a href="{{ testimonial.source_link }}">{{ testimonial.source }}</a>{% else %}{{ testimonial.source }}{% endif %}</p>
+					<blockquote>
+						<p>{{ testimonial.statement }}</p>
+					</blockquote>
+				</li>
+			{% endfor %}
+			</ul>
+		</aside>
+		{% endblock %}

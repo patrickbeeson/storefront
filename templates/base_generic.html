@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head> 
+	<meta charset="UTF-8">
+	
+	<title>{% block title %}| Starlight Custom Cycling Apparel{% endblock %}</title>
+	
+	<meta name="description" content="{% block meta_description %}Starlight Custom Cycling Apparel{% endblock %}">
+	<meta name="keywords" content="cycling, custom, apparel, Roanoke, Virginia, road, mountain, team, jersey, bibs, accesories">
+		
+	{% block css %}
+	<link rel="stylesheet" href="{{ STATIC_URL }}css/reset.css">
+	<link rel="stylesheet" href="{{ STATIC_URL }}css/styles.css">
+	<link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
+	<link rel="stylesheet" href="{{ STATIC_URL }}css/jquery.fancybox-1.3.4.css">
+	{% endblock %}
+	{% block js %}
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+	<script src="{{ STATIC_URL }}js/jquery.fancybox-1.3.4.pack.js"></script>
+	{% endblock %}
+
+</head>
+
+<body id="{% block app_type %}{% endblock %}" class="{% block view_type %}{% endblock %}{% block product_type %}{% endblock %}">
+	<div id="wrap">
+	<section id="branding">
+		<header>
+			<h1><a href="/">Starlight Custom Apparel</a></h1>
+		</header>
+		
+		<nav id="main_nav">
+			<ul>
+				<li><a href="#">Apparel</a>
+					<!--<ul>
+						<li><a href="categories/tops">Tops</a></li>
+						<li><a href="categories/bottoms">Bottoms</a></li>
+						<li><a href="categories/skinsuits">Skinsuits</a></li>
+						<li><a href="categories/accessories">Accessories</a></li>
+						<li><a href="categories/tri-running">Tri/Running</a></li>
+					</ul>-->
+				</li>
+				<li><a href="ordering">Ordering</a></li>
+				<li><a href="about">About Us</a></li>
+				<li><a href="contact">Contact Us</a></li>
+				<li><a href="#">Blog</a></li>
+			</ul>
+		</nav>
+		
+		{% block testimonials %}
+		{% endblock %}
+	</section>
+	
+	<section id="content">{% block content %}{% endblock %}</section>
+	
+	{% block product_nav %}{% endblock %}
+	
+	<section id="footer">
+		<aside>
+			<h1><a href="#">Team Store</a></h1>
+		</aside>
+	</section>
+	</div>
+	
+</body>
+
+</html>

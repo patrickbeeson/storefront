@@ -1,0 +1,24 @@
+{% extends "categories/category_detail.html" %}
+
+{% load category_helpers generic_markup mptt_tags %}
+
+{% block product_nav %}
+{% drilldown_tree_for_node category as parent_list %}
+<nav id="category_nav">
+<ul>
+{% for category in parent_list %}
+	{% if not category.is_leaf_node %}
+		<li class="parent_category">
+			<h2><a href="{{ category.get_absolute_url }}">{{ category.title }}</a></h2>
+			{{ category.description|apply_markup:"markdown" }}
+		</li>
+	{% else %}
+		<a href="{{ category.get_absolute_url }}"><li class="child_category">
+			<h3>{{ category.title }}</h3>
+		</li></a>
+	{% endif %}
+	
+{% endfor %}
+</ul>
+</nav>
+{% endblock %}

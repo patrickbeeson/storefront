@@ -1,0 +1,156 @@
+{% extends "base_apparel.html" %}
+
+{% block title %}{{ product.name }} {{ block.super }}{% endblock %}
+
+{% block app_type %}apparel{% endblock %}
+
+{% block view_type %}detail{% endblock %}
+
+{% block product_type %} {{ product.slug }}{% endblock %}
+
+{% block js %}
+{{ block.super }}
+<script>
+$(document).ready(function() {
+			$("a[rel=product_photoset]").fancybox({
+				'transitionIn'		: 'none',
+				'transitionOut'		: 'none',
+				'titlePosition' 	: 'over',
+				'titleFormat'		: function(title, currentArray, currentIndex, currentOpts) {
+					return '<span id="fancybox-title-over">Image ' + (currentIndex + 1) + ' / ' + currentArray.length + (title.length ? ' &nbsp; ' + title : '') + '</span>';
+				}
+			});
+			$("#product_details_window").fancybox({
+				'titlePosition'		: 'inside',
+				'transitionIn'		: 'none',
+				'transitionOut'		: 'none'
+			});
+});
+</script>
+{% endblock %}
+
+{% load generic_markup thumbnail %}
+
+{% block content %}
+<section id="product_details">
+	<h1>{{ product.name }}</h1>
+	
+	{{ product.description|apply_markup:"markdown" }}
+	<p id="product_details_prompt"><a id="product_details_window" href="#product_details_inline">See more information about this item</a></p>
+	
+	<div style="display: none;">
+		<aside id="product_details_inline" style="padding: 5px; width:400px;height:400px;overflow:auto;">
+			<h1>Product details</h1>
+			<ul>
+				{% if product.material %}
+				<li>
+					<h2>Material</h2>
+					{{ product.material|apply_markup:"markdown" }}
+				</li>
+				{% endif %}
+				{% if product.technology %}
+				<li>
+					<h2>Technology</h2>
+					<ul>
+					{% for technology in product.technology.all %}
+						<li>
+							<h3>{{ technology.name }}</h3>
+							{{ technology.description|apply_markup:"markdown" }}
+						</li>
+					{% endfor %}
+					</ul>
+				</li>
+				{% endif %}
+				{% if product.colors %}
+				<li>
+					<h2>Colors</h2>
+					<ul>
+					{% for color in product.colors.all %}
+						<li>
+							<h3>{{ color.name }}</h3>
+							{{ color.description|apply_markup:"markdown" }}
+						</li>
+					{% endfor %}
+					</ul>					
+				</li>
+				{% endif %}
+				<li>
+					<h2>Sizing</h2>
+					<ul>
+					{% for size in product.sizing.all %}
+						<li>
+							<h3>{{ size.name }}</h3>
+							{{ size.description|apply_markup:"markdown" }}
+							<ul>
+							{% for persontype in size.person_type.all %}
+								<li>For: {{ persontype.type }}</li>
+							{% endfor %}
+							</ul>
+						</li>
+					{% endfor %}
+					</ul>					
+				</li>
+				<li>
+					<h2>Seasons</h2>
+					<ul>
+					{% for season in product.seasons.all %}
+						<li>{{ season.name }}</li>
+					{% endfor %}
+					</ul>					
+				</li>				
+			</ul>
+		</aside>
+	</div>
+	
+	{% if product.lead_photo %}
+	<div id="lead_product_photo">
+	{% thumbnail product.lead_photo.photo "250x250" crop="center" format="PNG" as lead_photo %}
+        <img src="{{ lead_photo.url }}" width="{{ lead_photo.width }}" height="{{ lead_photo.width }}" alt="{{ product.lead_photo.description }}">
+    {% endthumbnail %}
+	</div>
+	{% else %}
+	{% if product.photoset %}
+	<div id="product_photoset">
+		<ul>
+	{% for photo in product.photoset.photos.all %}
+			<li class="photoset_photo">
+	{% thumbnail photo.photo "200x200" crop="center" format="PNG" as photoset_photo %}
+        		<a rel="product_photoset" href="{{ MEDIA_URL }}{{ photo.photo }}" title="{{ photo.description }}"><img src="{{ photoset_photo.url }}" width="{{ photoset_photo.width }}" height="{{ photoset_photo.width }}" alt="{{ photo.description }}"></a>
+    {% endthumbnail %}
+    		</li>
+    {% endfor %}
+    	</ul>
+    	<p>(Click any image to see a larger version.)</p>
+	</div>
+	{% endif %}
+	{% endif %}
+	
+	{% if product.template %}
+	<h2 id="product_template"><a href="{{ MEDIA_URL }}{{ product.template }}">Download Custom Template</a></h2>
+	{% endif %}
+	
+	
+	
+</section>
+
+{% endblock %}
+
+{% block product_nav %}
+<nav id="category_nav">
+	<ul>
+		{% for category in product.categories.all %}
+		<li class="parent_category">
+			<h2><a href="{{ category.get_absolute_url }}">{{ category.title }}</a></h2>
+			{{ category.description|apply_markup:"markdown" }}
+		</li>
+		{% endfor %}
+	</ul>
+	<ul id="category_products">
+		{% for category in product.categories.all %}
+			{% for product in category.product_set.all|dictsort:"id" %}
+    		<a href="{{ product.get_absolute_url }}" title="{{ product.name }}"><li class="{{ product.slug }}" class="product">{{ product.name }}</li></a>
+			{% endfor %}
+		{% endfor %}
+	</ul>
+</nav>
+{% endblock %}
